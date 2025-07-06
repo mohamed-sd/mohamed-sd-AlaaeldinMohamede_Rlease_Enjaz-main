@@ -58,7 +58,7 @@ class HomeScreenState extends State<HomeScreen>
       GlobalKey<RefreshIndicatorState>();
 
   Color mainColor = Color(0xFF001022);
-  Color marqueeBgColor = Color(0xff150900);
+  Color marqueeBgColor = Color(0xFF010F1E);
   @override
   void initState() {
     super.initState();
