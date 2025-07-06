@@ -12,7 +12,6 @@ import 'package:Enjaz/data/cubits/system/app_theme_cubit.dart';
 import 'package:Enjaz/data/cubits/system/user_details.dart';
 import 'package:Enjaz/data/helper/widgets.dart';
 import 'package:Enjaz/ui/screens/home/home_screen.dart';
-
 import 'package:Enjaz/ui/screens/widgets/custom_text_form_field.dart';
 import 'package:Enjaz/ui/theme/theme.dart';
 import 'package:Enjaz/utils/api.dart';
@@ -45,10 +44,10 @@ class LoginScreen extends StatefulWidget {
     Map? args = routeSettings.arguments as Map?;
     return MaterialPageRoute(
         builder: (_) => LoginScreen(
-              isDeleteAccount: args?['isDeleteAccount'],
-              popToCurrent: args?['popToCurrent'],
-              email: args?['email'] as String?,
-            ));
+          isDeleteAccount: args?['isDeleteAccount'],
+          popToCurrent: args?['popToCurrent'],
+          email: args?['email'] as String?,
+        ));
   }
 }
 
@@ -309,7 +308,7 @@ class LoginScreenState extends State<LoginScreen> {
           child: SafeArea(
             top: false,
             child: Scaffold(
-              backgroundColor: context.color.backgroundColor,
+              backgroundColor: Colors.white,
               bottomNavigationBar: !isOtpSent && !sendMailClicked
                   ? termAndPolicyTxt()
                   : SizedBox.shrink(),
@@ -452,7 +451,7 @@ class LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       // color: Colors.red,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 8),
+                          horizontal: 5.0, vertical: 5),
                       child: Center(
                           child: CustomText(
                             "+$countryCode",
@@ -470,6 +469,7 @@ class LoginScreenState extends State<LoginScreen> {
             listenable: mobileController,
             builder: (context, child) {
               return UiUtils.buildButton(context,
+                  buttonColor: context.color.tertiary,
                   onPressed: sendVerificationCode,
                   buttonTitle: 'continue'.translate(context),
                   radius: 10,
@@ -553,6 +553,7 @@ class LoginScreenState extends State<LoginScreen> {
                 context.read<AuthenticationCubit>().authenticate();
               },
                   buttonTitle: 'signIn'.translate(context),
+                  buttonColor: context.color.tertiary,
                   radius: 10,
                   disabled: emailController.text.isEmpty ||
                       _passwordController.text.isEmpty,
@@ -563,129 +564,161 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget buildLoginWidget() {
-    return SizedBox(
-      height: context.screenHeight - 50,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 25.0),
-              child: Align(
-                alignment: AlignmentDirectional.bottomEnd,
-                child: FittedBox(
-                  fit: BoxFit.none,
-                  child: MaterialButton(
-                    onPressed: () {
-                      HiveUtils.setUserSkip();
-                      HelperUtils.killPreviousPages(context, Routes.main,
-                          {"from": "login", "isSkipped": true});
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    color: context.color.forthColor.withValues(alpha: 0.102),
-                    elevation: 0,
-                    height: 28,
-                    minWidth: 64,
-                    child: CustomText(
-                      "skip".translate(context),
-                      color: context.color.forthColor,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 66,
-            ),
-            CustomText(
-              "welcomeback".translate(context),
-              fontSize: context.font.extraLarge,
-              color: context.color.textDefaultColor,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            if (Constant.mobileAuthentication == "1" ||
-                Constant.emailAuthentication == "1")
-              ValueListenableBuilder(
-                  valueListenable: isLoginWithMobile,
-                  builder: (context, isMobileLogin, child) {
-                    return isMobileLogin ? mobileLogin() : emailLogin();
-                  }),
-            const SizedBox(
-              height: 20,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (Constant.mobileAuthentication == "1" ||
-                    Constant.emailAuthentication == "1")
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomText("dontHaveAcc".translate(context),
-                          color: context.color.textColorDark
-                              .withValues(alpha: 0.7)),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.signupMainScreen);
-                          },
-                          child: CustomText(
-                            "signUp".translate(context),
-                            color: context.color.territoryColor,
-                            showUnderline: true,
-                          ))
-                    ],
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                googleAndAppleLogin(),
-                if (Constant.mobileAuthentication == "0" ||
-                    Constant.emailAuthentication == "0") ...[
-                  if ((Constant.googleAuthentication == "1") ||
-                      (Constant.appleAuthentication == "1" &&
-                          Platform.isIOS)) ...[
-                    const SizedBox(
-                      height: 65,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText("dontHaveAcc".translate(context),
-                            color: context.color.textColorDark
-                                .withValues(alpha: 0.7)),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, Routes.signupMainScreen);
-                            },
-                            child: CustomText(
-                              "signUp".translate(context),
-                              color: context.color.territoryColor,
-                              showUnderline: true,
-                            ))
-                      ],
-                    )
-                  ],
-                ],
-              ],
-            ),
-          ],
+    return
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/login.jpg"), // أو NetworkImage للرابط الخارجي
+            fit: BoxFit
+                .fill, // لجعل الصورة تغطي المساحة بالكامل
+          ),
         ),
-      ),
-    );
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: context.screenHeight - 50,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: FittedBox(
+                      fit: BoxFit.none,
+                      child: MaterialButton(
+                          onPressed: () {
+                            HiveUtils.setUserSkip();
+                            HelperUtils.killPreviousPages(context, Routes.main,
+                                {"from": "login", "isSkipped": true});
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          color: Colors.white,
+                          elevation: 0,
+                          height: 28,
+                          minWidth: 64,
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Icon(
+                              Icons.arrow_forward_outlined,
+                              color: Colors.black,
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 66,
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        CustomText(
+                          "welcomeback".translate(context),
+                          fontSize: context.font.extraLarge,
+                          color: context.color.textDefaultColor,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        // if (Constant.mobileAuthentication == "1" ||
+                        //     Constant.emailAuthentication == "1")
+                          ValueListenableBuilder(
+                              valueListenable: isLoginWithMobile,
+                              builder: (context, isMobileLogin, child) {
+                                return isMobileLogin ? mobileLogin() : emailLogin();
+                              }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            if (Constant.mobileAuthentication == "1" ||
+                                Constant.emailAuthentication == "1")
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomText("dontHaveAcc".translate(context),
+                                      color: context.color.textColorDark
+                                          .withValues(alpha: 0.7)),
+                                  const SizedBox(
+                                    width: 12,
+                                  ),
+                                  GestureDetector(
+                                      onTap: () {
+                                     //   Navigator.pushReplacementNamed(
+                                       //     context, Routes.mobileSignUp);
+                                      },
+                                      child: CustomText(
+                                        "signUp".translate(context),
+                                        color: context.color.tertiary,
+                                        showUnderline: true,
+                                      ))
+                                ],
+                              ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            googleAndAppleLogin(),
+                            if (Constant.mobileAuthentication == "0" ||
+                                Constant.emailAuthentication == "0") ...[
+                              if ((Constant.googleAuthentication == "1") ||
+                                  (Constant.appleAuthentication == "1" &&
+                                      Platform.isIOS)) ...[
+                                const SizedBox(
+                                  height: 65,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomText("dontHaveAcc".translate(context),
+                                        color: context.color.textColorDark
+                                            .withValues(alpha: 0.7)),
+                                    const SizedBox(
+                                      width: 12,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushReplacementNamed(
+                                              context, Routes.signupMainScreen);
+                                        },
+                                        child: CustomText(
+                                          "signUp".translate(context),
+                                          color: context.color.tertiary,
+                                          showUnderline: true,
+                                        ))
+                                  ],
+                                )
+                              ],
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+
+
+                ],
+              ),
+
+            ),
+          ),
+        ),
+      );
+
   }
 
   Widget googleAndAppleLogin() {
@@ -704,7 +737,7 @@ class LoginScreenState extends State<LoginScreen> {
         if (Constant.googleAuthentication == "1") ...[
           UiUtils.buildButton(context,
               prefixWidget: Padding(
-                padding: EdgeInsetsDirectional.only(end: 10.0),
+                padding: EdgeInsetsDirectional.only(end: 8.0),
                 child:
                 UiUtils.getSvg(AppIcons.googleIcon, width: 22, height: 22),
               ),
@@ -731,7 +764,7 @@ class LoginScreenState extends State<LoginScreen> {
         if (Constant.appleAuthentication == "1" && Platform.isIOS) ...[
           UiUtils.buildButton(context,
               prefixWidget: Padding(
-                padding: EdgeInsetsDirectional.only(end: 10.0),
+                padding: EdgeInsetsDirectional.only(end: 8.0),
                 child:
                 UiUtils.getSvg(AppIcons.appleIcon, width: 22, height: 22),
               ),
@@ -755,8 +788,8 @@ class LoginScreenState extends State<LoginScreen> {
             height: 12,
           ),
         ],
-        if (Constant.emailAuthentication == "1" ||
-            Constant.mobileAuthentication == "1")
+        // if (Constant.emailAuthentication == "1" ||
+        //     Constant.mobileAuthentication == "1")
           ValueListenableBuilder(
               valueListenable: isLoginWithMobile,
               builder: (context, isMobileField, child) {
@@ -764,7 +797,7 @@ class LoginScreenState extends State<LoginScreen> {
                   isLoginWithMobile.value = !isLoginWithMobile.value;
                 },
                     prefixWidget: Padding(
-                        padding: EdgeInsetsDirectional.only(end: 10.0),
+                        padding: EdgeInsetsDirectional.only(end: 8.0),
                         child: Icon(
                           isMobileField ? Icons.email : Icons.phone,
                           color: textDarkColor,
@@ -791,7 +824,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget termAndPolicyTxt() {
     return Padding(
-      padding: EdgeInsetsDirectional.only(bottom: 15.0, start: 25.0, end: 25.0),
+      padding: EdgeInsetsDirectional.only(bottom: 10.0, start: 20.0, end: 20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
@@ -806,7 +839,7 @@ class LoginScreenState extends State<LoginScreen> {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             InkWell(
                 child: CustomText("termsOfService".translate(context),
-                    color: context.color.territoryColor,
+                    color: context.color.tertiary,
                     fontSize: context.font.small,
                     showUnderline: true),
                 onTap: () => Navigator.pushNamed(
@@ -828,7 +861,7 @@ class LoginScreenState extends State<LoginScreen> {
             InkWell(
                 child: CustomText(
                   "privacyPolicy".translate(context),
-                  color: context.color.territoryColor,
+                  color: context.color.tertiary,
                   fontSize: context.font.small,
                   showUnderline: true,
                 ),
@@ -879,7 +912,7 @@ class LoginScreenState extends State<LoginScreen> {
             decoration: UnderlineDecoration(
               textStyle:
               TextStyle(fontSize: 20, color: context.color.textColorDark),
-              colorBuilder: FixedColorBuilder(context.color.territoryColor),
+              colorBuilder: FixedColorBuilder(context.color.tertiary),
             ),
             currentCode: otp,
             codeLength: 6,
@@ -893,13 +926,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget verifyOTPWidget() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 25.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: Align(
               alignment: AlignmentDirectional.bottomEnd,
               child: FittedBox(
@@ -945,7 +978,7 @@ class LoginScreenState extends State<LoginScreen> {
               InkWell(
                   child: CustomText(
                     "change".translate(context),
-                    color: context.color.territoryColor,
+                    color: context.color.tertiary,
                     fontSize: context.font.large,
                     showUnderline: true,
                   ),
@@ -972,7 +1005,7 @@ class LoginScreenState extends State<LoginScreen> {
                 startResendOtpTimer();
               },
               child: CustomText("resendOTP".translate(context),
-                  color: context.color.territoryColor),
+                  color: context.color.tertiary),
             )
                 : CustomText(
               "${"resendOtpIn".translate(context)} 0:${_start.toString().padLeft(2, '0')}",
