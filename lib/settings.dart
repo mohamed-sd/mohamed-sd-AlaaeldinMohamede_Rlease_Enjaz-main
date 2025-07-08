@@ -27,7 +27,7 @@ class PaymentGateway {
 
 class AppSettings {
   /// Basic Settings
-  static const String applicationName = 'Enjaz';
+  static const String applicationName = 'إنجاز';
   static const String packageName = 'enjaz.sd.com';
   static const String shareAppText = "Share this App";
 
