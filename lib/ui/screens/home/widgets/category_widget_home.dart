@@ -322,146 +322,146 @@ class _CategoryWidgetHomeState extends State<CategoryWidgetHome> {
 
   Widget subCategoryWidget(
       List<CategoryModel> subcategories, int categoryId, String categoryName) {
-    return
-      Container(
-        padding: EdgeInsets.all(10),
-
-        child:
-        Column(
-          children: [
-            if (subcategories.length > 6) ...[
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            children: List.generate(
+              subcategories.length > 6 ? 6 : subcategories.length,
+                  (i) {
+                final subcategory = subcategories[i];
+                return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.subCategoryScreen,
-                        arguments: {
-                          "categoryList": subcategories,
-                          "catName": categoryName,
-                          "catId": categoryId,
-                          "categoryIds": [categoryId.toString()]
-                        });
+                    if (subcategory.children!.isEmpty &&
+                        subcategory.subcategoriesCount == 0) {
+                      Navigator.pushNamed(context, Routes.itemsList,
+                          arguments: {
+                            'catID': subcategory.id.toString(),
+                            'catName': subcategory.name,
+                            "categoryIds": [
+                              categoryId.toString(),
+                              subcategory.id.toString()
+                            ]
+                          });
+                    } else {
+                      Navigator.pushNamed(context, Routes.subCategoryScreen,
+                          arguments: {
+                            "categoryList": subcategory.children,
+                            "catName": subcategory.name,
+                            "catId": subcategory.id,
+                            "categoryIds": [
+                              categoryId.toString(),
+                              subcategory.id.toString()
+                            ]
+                          });
+                    }
                   },
-                  child: CustomText(
-                    "seeAll".translate(context),
-                    showUnderline: true,
-                    fontSize: context.font.smaller + 3,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5)
-            ],
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              children: List.generate(
-                subcategories.length > 6 ? 6 : subcategories.length,
-                    (i) {
-                  final subcategory = subcategories[i];
-                  return GestureDetector(
-                    onTap: () {
-                      if (subcategory.children!.isEmpty &&
-                          subcategory.subcategoriesCount == 6) {
-                        Navigator.pushNamed(context, Routes.itemsList,
-                            arguments: {
-                              'catID': subcategory.id.toString(),
-                              'catName': subcategory.name,
-                              "categoryIds": [
-                                categoryId.toString(),
-                                subcategory.id.toString()
-                              ]
-                            });
-                      } else {
-                        Navigator.pushNamed(context, Routes.subCategoryScreen,
-                            arguments: {
-                              "categoryList": subcategory.children,
-                              "catName": subcategory.name,
-                              "catId": subcategory.id,
-                              "categoryIds": [
-                                categoryId.toString(),
-                                subcategory.id.toString()
-                              ]
-                            });
-                      }
-                    },
-
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child:
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child:
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.sizeOf(context).height * 0.50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            height: MediaQuery.sizeOf(context).height * 0.50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF120F36),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Align(
-                                            alignment: AlignmentDirectional(0, 0),
-                                            child: UiUtils.imageType(
-                                                subcategory.url ?? '',
-                                                fit: BoxFit.cover,
-                                                width: 25
-                                            ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF120F36),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: UiUtils.imageType(
+                                              subcategory.url ?? '',
+                                              fit: BoxFit.cover,
+                                              width: 25
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    subcategory.name ?? '',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: context.font.small,
-                                    ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  subcategory.name ?? '',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: context.font.small,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                  );
+                  ),
+                );
+              },
+            ),
+          ),
+          if (subcategories.length > 6) ...[
+            SizedBox(height: 10,),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.subCategoryScreen,
+                      arguments: {
+                        "categoryList": subcategories,
+                        "catName": categoryName,
+                        "catId": categoryId,
+                        "categoryIds": [categoryId.toString()]
+                      });
                 },
+                child: Center(
+                  child: CustomText(
+                    "seeAll".translate(context),
+                    showUnderline: true,
+                    fontSize: context.font.smaller + 3,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
+            const SizedBox(height: 5)
           ],
-        ),
-      );
+        ],
+      ),
+    );
   }
 }
